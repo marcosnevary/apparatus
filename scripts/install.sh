@@ -12,7 +12,7 @@ printf "> Installing CLI tools...\n"
 brew install git stow kitty neovim node uv oven-sh/bun/bun
 
 printf "> Installing applications...\n"
-brew install --cask zen mos raycast bitwarden filen obsidian discord spotify nikitabobko/tap/aerospace
+brew install --cask google-chrome mos raycast bitwarden filen obsidian discord nikitabobko/tap/aerospace
 brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font
 
 printf "> Installing fonts...\n"
@@ -39,10 +39,10 @@ ssh -T git@github.com || true
 
 printf "> Creating directories...\n"
 mkdir -p ~/Desktop/omnia/
-mkdir -p ~/Desktop/github/
+mkdir -p ~/Desktop/repositories/
 
 printf "> Cloning setup repository...\n"
-cd ~/Desktop/github/
+cd ~/Desktop/repositories/
 git clone git@github.com:marcosnevary/apparatus.git
 
 printf "> Linking dotfiles...\n"
