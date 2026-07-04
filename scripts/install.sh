@@ -12,7 +12,7 @@ printf "> Installing CLI tools...\n"
 brew install git stow kitty neovim node uv oven-sh/bun/bun
 
 printf "> Installing applications...\n"
-brew install --cask google-chrome mos raycast bitwarden filen obsidian discord nikitabobko/tap/aerospace
+brew install --cask google-chrome mos bitwarden filen obsidian discord nikitabobko/tap/aerospace spotify anki
 brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font
 
 printf "> Installing fonts...\n"
