@@ -11,7 +11,7 @@ printf "> Installing CLI tools...\n"
 brew install git stow ghostty uv
 
 printf "> Installing applications...\n"
-brew install --cask helium-browser mos bitwarden filen obsidian discord nikitabobko/tap/aerospace spotify calibre font-jetbrains-mono-nerd-font
+brew install --cask helium-browser mos bitwarden filen discord nikitabobko/tap/aerospace spotify calibre
 
 printf "> Installing Oh My Zsh...\n"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
