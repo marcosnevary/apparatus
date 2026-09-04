@@ -23,12 +23,12 @@ git config --global user.name "marcosnevary"
 git config --global user.email "marcos.nevary@gmail.com"
 
 printf "> Creating directories...\n"
-mkdir -p ~/Desktop/Books/
-mkdir -p ~/Desktop/Projects/
-mkdir -p ~/Desktop/Research/
+mkdir -p ~/Books/
+mkdir -p ~/Projects/
+mkdir -p ~/Research/
 
 printf "> Cloning setup repository...\n"
-cd ~/Desktop/Projects/
+cd ~/Projects/
 git clone https://github.com/marcosnevary/apparatus.git
 
 printf "> Linking dotfiles...\n"
@@ -36,7 +36,7 @@ cd apparatus/config
 stow -t ~ zsh aerospace
 
 printf "> Setting up capslock LaunchAgent...\n"
-CAPSLOCK_SCRIPT="$HOME/Desktop/Projects/apparatus/scripts/capslock.sh"
+CAPSLOCK_SCRIPT="$HOME/Projects/apparatus/scripts/capslock.sh"
 PLIST_PATH="$HOME/Library/LaunchAgents/com.marcos.capslock.plist"
 
 chmod +x "$CAPSLOCK_SCRIPT"
