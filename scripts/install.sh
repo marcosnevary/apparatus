@@ -8,7 +8,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 printf "> Installing packages...\n"
-brew install git gh stow uv ghostty helium-browser mos bitwarden filen obsidian nikitabobko/tap/aerospace claude-code calibre mactex-no-gui
+brew install git gh stow uv ghostty helium-browser mos bitwarden filen obsidian obs nikitabobko/tap/aerospace claude-code calibre mactex-no-gui
 
 printf "> Installing Oh My Zsh...\n"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
