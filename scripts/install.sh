@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 
 printf "> Installing Homebrew...\n"
@@ -5,41 +6,59 @@ if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
-brew update
 
-printf "> Installing CLI tools...\n"
-brew install git stow ghostty uv
-
-printf "> Installing applications...\n"
-brew install --cask helium-browser mos bitwarden filen nikitabobko/tap/aerospace spotify calibre
+printf "> Installing packages...\n"
+brew install git gh stow uv ghostty helium-browser mos bitwarden filen obsidian nikitabobko/tap/aerospace claude-code calibre mactex-no-gui
 
 printf "> Installing Oh My Zsh...\n"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
+printf "> Installing Zsh plugins...\n"
+ZSH_PLUGINS="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins"
+[ -d "$ZSH_PLUGINS/zsh-autosuggestions" ] || git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_PLUGINS/zsh-autosuggestions"
+[ -d "$ZSH_PLUGINS/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_PLUGINS/zsh-syntax-highlighting"
+
 printf "> Configuring Git...\n"
 git config --global user.name "marcosnevary"
 git config --global user.email "marcos.nevary@gmail.com"
 
+printf "> Configuring Claude Code...\n"
+# Disables the Co-Authored-By trailer in commits and PRs, keeping any other settings
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
+[ -f "$CLAUDE_SETTINGS" ] || echo '{}' >"$CLAUDE_SETTINGS"
+jq '.attribution = {"commit": "", "pr": ""}' "$CLAUDE_SETTINGS" >"$CLAUDE_SETTINGS.tmp"
+mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
+
+printf "> Authenticating with GitHub...\n"
+# Creates an SSH key if needed, uploads it to GitHub and sets SSH as the git protocol
+gh auth status &>/dev/null || gh auth login -h github.com -p ssh -w
+
 printf "> Creating directories...\n"
-mkdir -p ~/Books/
-mkdir -p ~/Projects/
-mkdir -p ~/Research/
+mkdir -p ~/books/
+mkdir -p ~/research/
+mkdir -p ~/projects/
 
 printf "> Cloning setup repository...\n"
-cd ~/Projects/
-git clone https://github.com/marcosnevary/apparatus.git
+cd ~/projects/
+GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" git clone git@github.com:marcosnevary/apparatus.git
 
 printf "> Linking dotfiles...\n"
 cd apparatus/config
-stow -t ~ zsh aerospace
+# Oh My Zsh creates its own ~/.zshrc, which would make stow abort
+[ -L ~/.zshrc ] || rm -f ~/.zshrc
+# Without an existing ~/.config, stow would symlink the whole folder into the repo
+mkdir -p ~/.config
+stow -t ~ zsh aerospace ghostty
 
 printf "> Setting up capslock LaunchAgent...\n"
-CAPSLOCK_SCRIPT="$HOME/Projects/apparatus/scripts/capslock.sh"
+CAPSLOCK_SCRIPT="$HOME/projects/apparatus/scripts/capslock.sh"
 PLIST_PATH="$HOME/Library/LaunchAgents/com.marcos.capslock.plist"
 
 chmod +x "$CAPSLOCK_SCRIPT"
+mkdir -p "$(dirname "$PLIST_PATH")"
 
 cat >"$PLIST_PATH" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -65,5 +84,9 @@ EOF
 
 launchctl bootout "gui/$(id -u)/com.marcos.capslock" 2>/dev/null || true
 launchctl bootstrap "gui/$(id -u)" "$PLIST_PATH"
+
+printf "> Opening apps that need Accessibility permission...\n"
+open -a AeroSpace
+open -a Mos
 
 printf "> Setup complete. Please restart.\n"
