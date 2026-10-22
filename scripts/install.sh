@@ -8,7 +8,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 printf "> Installing packages...\n"
-brew install git gh stow uv ghostty helium-browser mos bitwarden filen anki obsidian obs nikitabobko/tap/aerospace claude-code calibre mactex-no-gui
+brew install git gh stow uv ghostty helium-browser mos bitwarden filen anki obsidian obs nikitabobko/tap/aerospace claude-code calibre basictex
 
 printf "> Installing Oh My Zsh...\n"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -31,6 +31,15 @@ mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
 jq '.attribution = {"commit": "", "pr": ""}' "$CLAUDE_SETTINGS" >"$CLAUDE_SETTINGS.tmp"
 mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
 
+printf "> Configuring Dock...\n"
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0.6
+defaults write com.apple.dock persistent-apps -array
+defaults write com.apple.dock persistent-others -array
+defaults write com.apple.dock show-recents -bool false
+killall Dock
+
 printf "> Authenticating with GitHub...\n"
 gh auth status &>/dev/null || gh auth login -h github.com -p ssh -w
 
@@ -42,7 +51,7 @@ mkdir -p ~/ufpa/
 
 printf "> Cloning setup repository...\n"
 cd ~/projects/
-GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" git clone git@github.com:marcosnevary/apparatus.git
+[ -d apparatus ] || GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" git clone git@github.com:marcosnevary/apparatus.git
 
 printf "> Linking dotfiles...\n"
 cd apparatus/config
@@ -84,9 +93,5 @@ launchctl bootstrap "gui/$(id -u)" "$PLIST_PATH"
 
 printf "> Enabling DRM in Helium...\n"
 bash "$HOME/projects/apparatus/scripts/helium-drm.sh"
-
-printf "> Opening apps that need Accessibility permission...\n"
-open -a AeroSpace
-open -a Mos
 
 printf "> Setup complete. Please restart.\n"
