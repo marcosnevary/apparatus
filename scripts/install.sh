@@ -25,7 +25,6 @@ git config --global user.name "marcosnevary"
 git config --global user.email "marcos.nevary@gmail.com"
 
 printf "> Configuring Claude Code...\n"
-# Disables the Co-Authored-By trailer in commits and PRs, keeping any other settings
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
 mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
 [ -f "$CLAUDE_SETTINGS" ] || echo '{}' >"$CLAUDE_SETTINGS"
@@ -33,13 +32,13 @@ jq '.attribution = {"commit": "", "pr": ""}' "$CLAUDE_SETTINGS" >"$CLAUDE_SETTIN
 mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
 
 printf "> Authenticating with GitHub...\n"
-# Creates an SSH key if needed, uploads it to GitHub and sets SSH as the git protocol
 gh auth status &>/dev/null || gh auth login -h github.com -p ssh -w
 
 printf "> Creating directories...\n"
 mkdir -p ~/books/
-mkdir -p ~/research/
+mkdir -p ~/obsidian/
 mkdir -p ~/projects/
+mkdir -p ~/ufpa/
 
 printf "> Cloning setup repository...\n"
 cd ~/projects/
@@ -47,9 +46,7 @@ GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" git clone git@github.c
 
 printf "> Linking dotfiles...\n"
 cd apparatus/config
-# Oh My Zsh creates its own ~/.zshrc, which would make stow abort
 [ -L ~/.zshrc ] || rm -f ~/.zshrc
-# Without an existing ~/.config, stow would symlink the whole folder into the repo
 mkdir -p ~/.config
 stow -t ~ zsh aerospace ghostty
 
