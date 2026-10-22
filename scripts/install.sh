@@ -82,6 +82,9 @@ EOF
 launchctl bootout "gui/$(id -u)/com.marcos.capslock" 2>/dev/null || true
 launchctl bootstrap "gui/$(id -u)" "$PLIST_PATH"
 
+printf "> Enabling DRM in Helium...\n"
+bash "$HOME/projects/apparatus/scripts/helium-drm.sh"
+
 printf "> Opening apps that need Accessibility permission...\n"
 open -a AeroSpace
 open -a Mos

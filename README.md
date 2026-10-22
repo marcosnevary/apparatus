@@ -21,7 +21,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/marcosnevary/apparatus/m
 7. Clones this repository over SSH into `~/projects/apparatus`.
 8. Links the dotfiles in `config/` into `~` with GNU Stow.
 9. Registers a LaunchAgent that removes the Caps Lock delay at login.
-10. Opens AeroSpace and Mos so macOS asks for their Accessibility permission.
+10. Copies Widevine from the official Chrome installer into Helium so DRM content plays, without installing Chrome.
+11. Opens AeroSpace and Mos so macOS asks for their Accessibility permission.
+
+Updating Helium replaces the app bundle and drops Widevine, so run `scripts/helium-drm.sh` again after each update.
 
 ## Structure
 
@@ -33,6 +36,7 @@ config/          dotfiles, one Stow package per app
 scripts/
   install.sh     setup script
   capslock.sh    removes the Caps Lock delay (run by the LaunchAgent)
+  helium-drm.sh  enables Widevine DRM in Helium
 ```
 
 Each folder in `config/` mirrors the home directory, so `config/ghostty/.config/ghostty/config` becomes `~/.config/ghostty/config`. Since the files are symlinks, editing them in place changes the repository.
