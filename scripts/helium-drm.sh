@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Copies WidevineCdm from the official Chrome installer into Helium, without installing Chrome
 set -e
 
 HELIUM_APP="${HELIUM_APP:-/Applications/Helium.app}"
@@ -18,6 +17,5 @@ HELIUM_LIBRARIES="$(echo "$HELIUM_APP"/Contents/Frameworks/Helium\ Framework.fra
 rm -rf "$HELIUM_LIBRARIES/WidevineCdm"
 cp -R "$CHROME_WIDEVINE" "$HELIUM_LIBRARIES/"
 
-# Modifying the bundle breaks Helium's signature, so it is signed again ad hoc
 xattr -cr "$HELIUM_APP"
 codesign --force --deep --sign - "$HELIUM_APP"
