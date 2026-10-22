@@ -1,0 +1,8 @@
+background = #000000
+background-opacity = 0.85
+background-blur = 40
+window-padding-x = 12
+window-padding-y = 8
+window-padding-balance = true
+
+keybind = cmd+t=new_window
