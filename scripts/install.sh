@@ -38,6 +38,7 @@ defaults write com.apple.dock autohide-time-modifier -float 0.6
 defaults write com.apple.dock persistent-apps -array
 defaults write com.apple.dock persistent-others -array
 defaults write com.apple.dock show-recents -bool false
+defaults write -g ApplePressAndHoldEnabled -bool false
 killall Dock
 
 printf "> Authenticating with GitHub...\n"
